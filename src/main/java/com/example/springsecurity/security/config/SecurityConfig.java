@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -23,18 +24,22 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.csrf(csrf -> csrf.disable()).httpBasic(Customizer.withDefaults())//se usa solo en caso de loguear con user y pass
+        return httpSecurity
+                .csrf(csrf -> csrf.disable())
+                .httpBasic(Customizer.withDefaults()) //se usa solo en caso de loguear con user y pass
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(http -> {
-                    //endpoints publicos
-                    http.requestMatchers(HttpMethod.GET, "/holaNoSeg").permitAll();
-                    http.requestMatchers(HttpMethod.GET, "/holaSeg").hasAnyAuthority("READ");
-                    http.anyRequest().denyAll();
-                }).build();
+//                .authorizeHttpRequests(http -> {
+//                    //endpoints publicos
+//                    http.requestMatchers(HttpMethod.GET, "/holaNoSeg").permitAll();
+//                    http.requestMatchers(HttpMethod.GET, "/holaSeg").hasAnyAuthority("READ");
+//                    http.anyRequest().denyAll();
+//    }).
+                .build();
     }
 
     @Bean

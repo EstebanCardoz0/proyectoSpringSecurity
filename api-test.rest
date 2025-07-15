@@ -1,0 +1,9 @@
+GET http://localhost:8080/holaSeg
+Accept: application/json
+
+###
+GET http://localhost:8080/holaNoSeg
+Accept: application/json
+
+
+
