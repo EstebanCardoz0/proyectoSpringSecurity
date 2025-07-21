@@ -32,7 +32,6 @@ public class Role {
 
     //usamos set xq no permite repetidos
     //List permite repetidos
-
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name="roles_permissions",
                joinColumns = @JoinColumn(name="role_id"),
