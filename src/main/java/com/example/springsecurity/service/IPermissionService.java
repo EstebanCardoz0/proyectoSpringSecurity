@@ -11,7 +11,7 @@ public interface IPermissionService {
 
     List findAll();
 
-    Optional findById(Long id);
+    Optional<Permission> findById(Long id);
 
     Permission save(Permission permi);
 

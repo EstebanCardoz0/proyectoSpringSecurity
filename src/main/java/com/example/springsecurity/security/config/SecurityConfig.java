@@ -47,11 +47,16 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+
+    //creamos authentication provide
+    //agremamos el userdetailservice como parametro
     @Bean
-    public AuthenticationProvider authenticationProvider() {
+    public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder());
-        provider.setUserDetailsService(userDetailsService());
+        //sacamos el anterior, el logico y agregamos el nuevo
+//        provider.setUserDetailsService(userDetailsService());
+        provider.setUserDetailsService(userDetailsService);
         return provider;
     }
 
@@ -60,19 +65,19 @@ public class SecurityConfig {
         return NoOpPasswordEncoder.getInstance();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        List userDetailsList = new ArrayList<>();
-
-        userDetailsList.add(User.withUsername("esteban").password("123")// esto si no está codificado, sino tendrá que seguir el algoritmo de codificación
-                .roles("ADMIN").authorities("CREATE", "READ", "UPDATE", "DELETE").build());
-
-        userDetailsList.add(User.withUsername("seguidor").password("123").roles("USER").authorities("READ").build());
-
-        userDetailsList.add(User.withUsername("actualizador").password("123").roles("USER").authorities("UPDATE").build());
-
-        return new InMemoryUserDetailsManager(userDetailsList);
-    }
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//        List userDetailsList = new ArrayList<>();
+//
+//        userDetailsList.add(User.withUsername("esteban").password("123")// esto si no está codificado, sino tendrá que seguir el algoritmo de codificación
+//                .roles("ADMIN").authorities("CREATE", "READ", "UPDATE", "DELETE").build());
+//
+//        userDetailsList.add(User.withUsername("seguidor").password("123").roles("USER").authorities("READ").build());
+//
+//        userDetailsList.add(User.withUsername("actualizador").password("123").roles("USER").authorities("UPDATE").build());
+//
+//        return new InMemoryUserDetailsManager(userDetailsList);
+//    }
 
 
 //    @Bean
