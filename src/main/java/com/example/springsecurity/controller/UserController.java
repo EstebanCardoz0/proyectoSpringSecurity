@@ -21,17 +21,17 @@ public class UserController {
     @Autowired
     private IUserService userSer;
     @Autowired
-    private IRoleService rolerSer;
+    private IRoleService roleSer;
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userSer.findAll();
+    public ResponseEntity<List<UserSec>> getAllUsers() {
+        List<UserSec> users = userSer.findAll();
         return ResponseEntity.ok(users);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getUserById(@PathVariable Long id) {
-        Optional<User> user = userSer.findById(id);
+    public ResponseEntity<UserSec> getUserById(@PathVariable Long id) {
+        Optional<UserSec> user = userSer.findById(id);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -42,7 +42,7 @@ public class UserController {
 
         //recuperar la permission por su ID
         for (Role role : userSec.getRolesList()) {
-            readRole = rolerSer.findById(role.getId()).orElse(null);
+            readRole = roleSer.findById(role.getId()).orElse(null);
 
             if (readRole != null) {
                 //si encuentro, lo guardo en la lista

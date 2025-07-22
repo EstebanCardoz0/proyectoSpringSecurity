@@ -15,7 +15,7 @@ public class RoleService implements IRoleService {
     private IRoleRepository roleRepo;
 
     @Override
-    public List findAll() {
+    public List<Role> findAll() {
         return roleRepo.findAll();
     }
 

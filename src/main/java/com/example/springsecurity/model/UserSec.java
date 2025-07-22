@@ -4,14 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
-import java.util.Set;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 @Entity
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -40,6 +40,7 @@ public class UserSec {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> rolesList = new HashSet<>();
+//    private Set rolesList = new HashSet<>();
 
 
 }

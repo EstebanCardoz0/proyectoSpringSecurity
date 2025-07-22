@@ -15,7 +15,7 @@ public class PermissionService implements IPermissionService {
     private IPermissionRepository permiRepo;
 
     @Override
-    public List findAll() {
+    public List<Permission> findAll() {
         return permiRepo.findAll();
     }
 

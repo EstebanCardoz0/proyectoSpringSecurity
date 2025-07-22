@@ -15,12 +15,12 @@ public class UserService implements IUserService {
     IUserRepository userRepo;
 
     @Override
-    public List findAll() {
+    public List<UserSec> findAll() {
         return userRepo.findAll();
     }
 
     @Override
-    public Optional findById(Long id) {
+    public Optional<UserSec> findById(Long id) {
         return userRepo.findById(id);
     }
 
