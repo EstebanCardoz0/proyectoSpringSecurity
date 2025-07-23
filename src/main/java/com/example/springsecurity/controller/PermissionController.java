@@ -20,7 +20,7 @@ public class PermissionController {
     public ResponseEntity<List<Permission>> getAllPermissions() {
         List<Permission> permissions = permiSer.findAll();
         return ResponseEntity.ok(permissions);
-    }
+    }   
 
     @GetMapping("/{id}")
     public ResponseEntity<Permission> getPermissionById(@PathVariable Long id) {

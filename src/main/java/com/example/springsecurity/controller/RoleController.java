@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @RestController
-@RequestMapping("api/roles")
+@RequestMapping("/api/roles")
 public class RoleController {
 
     @Autowired
@@ -36,8 +36,8 @@ public class RoleController {
     }
 
     @PostMapping
-    public ResponseEntity createRole(@RequestBody Role role) {
-        Set<Permission> permiList = new HashSet<>();
+    public ResponseEntity<Role> createRole(@RequestBody Role role) {
+        Set<Permission> permiList = new HashSet<Permission>();
         Permission readPermission;
 
         //recuperar permissions por su id

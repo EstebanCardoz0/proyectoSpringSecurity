@@ -3,7 +3,6 @@ package com.example.springsecurity.service;
 import com.example.springsecurity.model.UserSec;
 import com.example.springsecurity.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,22 +23,33 @@ public class UserDetailsServiceImp implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        //tenemos User y necesitamos devolver Userdetails
+        //tenemos Usersec y necesitamos devolver Userdetails
 
         //traemos el user de la bd
-        UserSec userSec = userRepo.findUserEntityByUsername( username).orElseThrow(() -> new UsernameNotFoundException("El usuario " + username + " no fue encontrado"));
+        UserSec userSec = userRepo.findUserEntityByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("El usuario " + username + " no fue encontrado"));
 
         //con granted authority spring security maneja permisos
-        List<GrantedAuthority> authorityList = new ArrayList<>();
+        List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
 
         //programacion funcional a full
         //tomamos roles y los convertimos en simplegranted para poder agregarlos a la autority list
-        userSec.getRolesList().forEach(role -> authorityList.add(new SimpleGrantedAuthority("ROLE_".concat(role.getRole()))));
+        userSec.getRolesList()
+                .forEach(role -> authorityList.add(new SimpleGrantedAuthority("ROLE_".concat(role.getRole()))));
 
         //ahora tenemos que agregar los permisos
-        userSec.getRolesList().stream().flatMap(role -> role.getPermissionsList().stream()).forEach(permission -> authorityList.add(new SimpleGrantedAuthority(permission.getPermissionName())));
+        userSec.getRolesList().stream()
+                .flatMap(role -> role.getPermissionsList().stream())
+                .forEach(permission -> authorityList.add(new SimpleGrantedAuthority(permission.getPermissionName())));
 
-//retornamos el usuario en formato spring security con los datos de nuestro userSec
-        return new User(userSec.getUsername(), userSec.getPassword(), userSec.isEnabled(), userSec.isAccountNotExpired(), userSec.isCredentialNotExpired(), userSec.isAccountNotLocked(), authorityList);
+        //retornamos el usuario en formato spring security con los datos de nuestro userSec
+        return new User(
+                userSec.getUsername(),
+                userSec.getPassword(),
+                userSec.isEnabled(),
+                userSec.isAccountNotExpired(),
+                userSec.isCredentialNotExpired(),
+                userSec.isAccountNotLocked(),
+                authorityList);
     }
 }

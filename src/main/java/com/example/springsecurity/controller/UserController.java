@@ -4,7 +4,6 @@ import com.example.springsecurity.model.Role;
 import com.example.springsecurity.model.UserSec;
 import com.example.springsecurity.service.IRoleService;
 import com.example.springsecurity.service.IUserService;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,8 +35,8 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity createUser(@RequestBody UserSec userSec) {
-        Set<Role> roleList = new HashSet<>();
+    public ResponseEntity<UserSec> createUser(@RequestBody UserSec userSec) {
+        Set<Role> roleList = new HashSet<Role>();
         Role readRole;
 
         //recuperar la permission por su ID
