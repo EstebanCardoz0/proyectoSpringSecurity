@@ -5,7 +5,9 @@ import com.example.springsecurity.model.UserSec;
 import com.example.springsecurity.service.IRoleService;
 import com.example.springsecurity.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
@@ -14,6 +16,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @RestController
+@PreAuthorize("denyAll()")
 @RequestMapping("/api/users")
 public class UserController {
 
@@ -23,21 +26,27 @@ public class UserController {
     private IRoleService roleSer;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<UserSec>> getAllUsers() {
         List<UserSec> users = userSer.findAll();
         return ResponseEntity.ok(users);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<UserSec> getUserById(@PathVariable Long id) {
         Optional<UserSec> user = userSer.findById(id);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasRole('ADMIN') and hasPermission('CREATE')  ")
     @PostMapping
     public ResponseEntity<UserSec> createUser(@RequestBody UserSec userSec) {
         Set<Role> roleList = new HashSet<Role>();
         Role readRole;
+
+        //encriptamos pass
+        userSec.setPassword(userSer.encriptPassword(userSec.getPassword()));
 
         //recuperar la permission por su ID
         for (Role role : userSec.getRolesList()) {

@@ -11,7 +11,8 @@ import java.util.List;
 @PreAuthorize("denyAll()")
 public class HelloWorldController {
 
-    @PreAuthorize("hasAuthority('READ')")
+//    @PreAuthorize("hasAuthority('READ')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/holaSeg")
     public String secHelloWorld() {
         return "Hello, World! con seguridad";
