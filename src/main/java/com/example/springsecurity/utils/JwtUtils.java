@@ -1,13 +1,18 @@
 package com.example.springsecurity.utils;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -48,7 +53,38 @@ public class JwtUtils {
                 .sign(algorithm); //nuestra firma es la que creamos con la clave secreta
 
         return jwtToken;
+    }
 
+    //metodo para decodificar
+    public DecodedJWT validateToken(String token) {
+
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(this.privateKey);//algoritmo mas clave privada
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer(this.userGenerator)
+                    .build(); //usa un patron builder
+
+            //si esta todo ok, no genera excepcion y hace el return
+            DecodedJWT decodedJWT = verifier.verify(token);
+            return decodedJWT;
+        } catch (JWTVerificationException exception) {
+            throw new JWTVerificationException("Invalid token, Not authorized");
+        }
+    }
+
+    public String extracUsername(DecodedJWT decodedJWT) {
+        //el subject es el user segun establecimos al crear el token
+        return decodedJWT.getSubject().toString();
+    }
+
+    //devuelvo un claim en particular
+    public Claim getSpecificClaim(DecodedJWT decodedJWT, String claimName) {
+        return decodedJWT.getClaim(claimName);
+    }
+
+    //devuelvo todos los claims
+    public Map<String, Claim> returnAllClaims(DecodedJWT decodedJWT) {
+        return decodedJWT.getClaims();
     }
 
 }
