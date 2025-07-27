@@ -31,7 +31,7 @@ public class JwtUtils {
 
         Algorithm algorithm = Algorithm.HMAC256(this.privateKey);
 
-        //esto está dentro del security context holder
+        //esto queda dentro del security context holder
         String username = authentication.getPrincipal().toString();
 
         //tambien obtenemos los permisos/autorizaciones
