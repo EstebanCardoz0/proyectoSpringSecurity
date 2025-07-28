@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,12 +24,14 @@ public class JwtTokenValidator extends OncePerRequestFilter {
     private JwtUtils jwtUtils;
 
     public JwtTokenValidator(JwtUtils jwtUtils) {
+
         this.jwtUtils = jwtUtils;
     }
 
     protected void doFilterInternal(@Nonnull HttpServletRequest request,
                                     @Nonnull HttpServletResponse response,
                                     @Nonnull FilterChain filterChain) throws ServletException, IOException {
+
         String jwtToken = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (jwtToken != null) {
@@ -44,8 +47,9 @@ public class JwtTokenValidator extends OncePerRequestFilter {
 
             //si todo está ok, hay que setearlo en el context holder
             //para eso tengo que convertirlos a grantedauthority
-            Collection authoritiesList = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
 
+//            Collection authoritiesList = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
+            Collection<? extends GrantedAuthority> authoritiesList = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
             //si se valida el token, le damos acceso al user en el context holder
             SecurityContext context = SecurityContextHolder.getContext();
             Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, authoritiesList);
