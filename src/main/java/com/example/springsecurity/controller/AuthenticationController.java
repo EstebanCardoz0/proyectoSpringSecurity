@@ -1,6 +1,7 @@
 package com.example.springsecurity.controller;
 
 import com.example.springsecurity.dto.AuthLoginRequestDTO;
+import com.example.springsecurity.dto.AuthResponseDTO;
 import com.example.springsecurity.service.UserDetailsServiceImp;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class AuthenticationController {
 
     //todas estas request y responses vamos a tratarlos como DTO
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AuthLoginRequestDTO userRequest) {
+    public ResponseEntity<AuthResponseDTO> login(@RequestBody @Valid AuthLoginRequestDTO userRequest) {
         return new ResponseEntity<>(this.userDetailsService.loginUser(userRequest), HttpStatus.OK);
     }
 }

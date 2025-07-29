@@ -28,6 +28,8 @@ public class UserDetailsServiceImp implements UserDetailsService {
     private IUserRepository userRepo;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtUtils jwtUtils;
 
 
     @Override
@@ -72,7 +74,7 @@ public class UserDetailsServiceImp implements UserDetailsService {
         Authentication authentication = this.authenticate(username, password);
         //si todo sale bien
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String accesToken = JwtUtils.createToken(authentication);
+        String accesToken = jwtUtils.createToken(authentication);
         AuthResponseDTO authResponseDTO = new AuthResponseDTO(username, "login ok", accesToken, true);
         return authResponseDTO;
     }
