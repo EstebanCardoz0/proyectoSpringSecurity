@@ -22,6 +22,9 @@ public class AuthenticationController {
     //todas estas request y responses vamos a tratarlos como DTO
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> login(@RequestBody @Valid AuthLoginRequestDTO userRequest) {
+        System.out.println("Email recibido: " + userRequest.username());
+        System.out.println("pass recibido: " + userRequest.password());
+
         return new ResponseEntity<>(this.userDetailsService.loginUser(userRequest), HttpStatus.OK);
     }
 }

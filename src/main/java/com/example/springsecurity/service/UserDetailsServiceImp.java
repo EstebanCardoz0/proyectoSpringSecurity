@@ -69,7 +69,7 @@ public class UserDetailsServiceImp implements UserDetailsService {
 
         //recuperamos user y pass
         String username = authLoginRequest.username();
-        String password = authLoginRequest.pasword();
+        String password = authLoginRequest.password();
 
         Authentication authentication = this.authenticate(username, password);
         //si todo sale bien
@@ -87,9 +87,11 @@ public class UserDetailsServiceImp implements UserDetailsService {
         if (userDetails == null) {
             throw new BadCredentialsException("Invalid username or password");
         }
+        System.out.println(passwordEncoder.matches("123456", "$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iYqiSFfdup6TN1rV1Pn7b3hD.Tbu"));
+
         //si no es igual
         if (!passwordEncoder.matches(password, userDetails.getPassword())) {
-            throw new BadCredentialsException("Invalid password");
+            throw new BadCredentialsException("Invalid username or password");
         }
         return new UsernamePasswordAuthenticationToken(username, userDetails.getPassword(), userDetails.getAuthorities());
     }
